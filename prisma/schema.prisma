@@ -1,0 +1,57 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Profile {
+    id          Int          @id @default(autoincrement())
+    name        String
+    description String
+    links       String[]
+    skills      Skills[]     @relation("ProfileSkills")
+    experience  Experience[] @relation("ProfileExperience")
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    projects    Project[]
+    projects    Project[]
+}
+
+model Skills {
+    id        Int       @id @default(autoincrement())
+    skill     String
+    profiles  Profile[] @relation("ProfileSkills")
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    project   Project?  @relation(fields: [projectId], references: [id])
+    projectId Int?
+}
+
+model Experience {
+    id          Int      @id @default(autoincrement())
+    company     String
+    position    String
+    description String
+    startDate   DateTime
+    endDate     DateTime
+    profile     Profile  @relation("ProfileExperience", fields: [profileId], references: [id])
+    profileId   Int
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model Project {
+    id          Int      @id @default(autoincrement())
+    name        String
+    description String
+    skills      Skills[] @relation("ProjectSkills")
+    url         String[]
+    profile     Profile  @relation("ProfileProject", fields: [profileId], references: [id])
+    profileId   Int
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    profile     Profile  @relation(fields: [profileId], references: [id])
+}
