@@ -14,20 +14,18 @@ model Profile {
     links       String[]
     skills      Skills[]     @relation("ProfileSkills")
     experience  Experience[] @relation("ProfileExperience")
+    projects    Project[]    @relation("ProfileProject")
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt
-    projects    Project[]
-    projects    Project[]
 }
 
 model Skills {
     id        Int       @id @default(autoincrement())
     skill     String
     profiles  Profile[] @relation("ProfileSkills")
+    projects  Project[] @relation("ProjectSkills")
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
-    project   Project?  @relation(fields: [projectId], references: [id])
-    projectId Int?
 }
 
 model Experience {
@@ -53,5 +51,4 @@ model Project {
     profileId   Int
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
-    profile     Profile  @relation(fields: [profileId], references: [id])
 }
